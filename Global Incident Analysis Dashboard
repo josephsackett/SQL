@@ -1,0 +1,34 @@
+-- INCIDENTS TABLE: Details about various international incidents
+CREATE TABLE incidents (
+    incident_id INTEGER PRIMARY KEY,
+    incident_name TEXT,
+    location TEXT,
+    incident_date DATE,
+    threat_level TEXT,
+    description TEXT
+);
+
+INSERT INTO incidents (incident_id, incident_name, location, incident_date, threat_level, description)
+VALUES
+    (1, 'Cyber Attack on Energy Infrastructure', 'Country A', '2023-05-15', 'High', 'A significant cyber attack targeting the energy infrastructure, causing widespread power outages.'),
+    (2, 'Espionage Activity Detected', 'Country B', '2023-06-20', 'Medium', 'Suspicious activities indicating a potential espionage operation by a foreign intelligence service.'),
+    (3, 'Attempted Smuggling of Sensitive Technology', 'Country C', '2023-07-05', 'Critical', 'Intercepted attempt to smuggle advanced technological components out of the country.');
+
+-- AGENTS REPORTS TABLE: Reports filed by agents on incidents
+CREATE TABLE agents_reports (
+    report_id INTEGER PRIMARY KEY,
+    incident_id INTEGER,
+    agent_id TEXT,
+    report_date DATE,
+    findings TEXT,
+    recommendations TEXT,
+    FOREIGN KEY (incident_id) REFERENCES incidents (incident_id)
+);
+
+INSERT INTO agents_reports (report_id, incident_id, agent_id, report_date, findings, recommendations)
+VALUES
+    (1, 1, 'AGT1001', '2023-05-16', 'Confirmed cyber attack origins from Country X. Major vulnerabilities exploited in the energy grid software.', 'Recommend immediate cybersecurity review and reinforcement of critical infrastructure.'),
+    (2, 2, 'AGT1002', '2023-06-21', 'Detected espionage activities link back to known operatives of Country Y. Surveillance and countermeasures initiated.', 'Suggest increasing counter-intelligence operations in key areas and enhancing security clearances.'),
+    (3, 3, 'AGT1003', '2023-07-06', 'Technology seized is cutting-edge and likely intended for military applications by Country Z. Successful interception prevents potential security breach.', 'Advise strengthening export controls and enhancing border security measures.');
+
+#This query provides a summary of incidents grouped by threat level, showing the count of incidents at each level. It's an essential analysis for understanding the distribution of incidents based on severity.
