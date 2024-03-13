@@ -43,3 +43,11 @@ SELECT i.incident_name, i.location, i.incident_date, i.threat_level, i.descripti
 FROM incidents i
 JOIN agents_reports ar ON i.incident_id = ar.incident_id
 WHERE i.incident_name = 'Cyber Attack on Energy Infrastructure';
+
+#Identifying incidents that lack detailed follow-up can highlight gaps in intelligence coverage. This query finds incidents that don't yet have corresponding agent reports.
+SELECT *
+FROM incidents
+WHERE incident_id NOT IN (
+    SELECT DISTINCT incident_id
+    FROM agents_reports);
+
