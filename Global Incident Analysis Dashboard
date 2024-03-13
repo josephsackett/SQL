@@ -56,3 +56,23 @@ SELECT agent_id, COUNT(report_id) AS reports_filed
 FROM agents_reports
 GROUP BY agent_id
 ORDER BY reports_filed DESC;
+
+#Fetching the most recent incidents along with their first reports can provide quick insights into fresh intelligence matters. This query demonstrates working with dates and ordering.
+SELECT i.incident_id, i.incident_name, i.incident_date, i.threat_level,
+       ar.report_id, ar.agent_id, ar.report_date
+FROM incidents i
+JOIN agents_reports ar ON i.incident_id = ar.incident_id
+WHERE ar.report_date = (
+    SELECT MIN(report_date)
+    FROM agents_reports ar2
+    WHERE ar2.incident_id = i.incident_id
+)
+ORDER BY i.incident_date DESC
+LIMIT 5;
+
+#This advanced query could analyze the correlation between threat levels and the speed of report submission by agents, potentially indicating areas for operational improvement.
+SELECT i.threat_level, AVG(julianday(ar.report_date) - julianday(i.incident_date)) AS avg_response_time_days
+FROM incidents i
+JOIN agents_reports ar ON i.incident_id = ar.incident_id
+GROUP BY i.threat_level
+ORDER BY avg_response_time_days;
