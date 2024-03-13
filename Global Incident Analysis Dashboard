@@ -36,3 +36,10 @@ SELECT threat_level, COUNT(incident_id) AS incident_count
 FROM incidents
 GROUP BY threat_level
 ORDER BY incident_count DESC;
+
+#For in-depth analysis or briefing purposes, this query fetches all relevant details about a specific incident, including agent reports. It uses a JOIN to combine data from both tables.
+SELECT i.incident_name, i.location, i.incident_date, i.threat_level, i.description, 
+       ar.agent_id, ar.report_date, ar.findings, ar.recommendations
+FROM incidents i
+JOIN agents_reports ar ON i.incident_id = ar.incident_id
+WHERE i.incident_name = 'Cyber Attack on Energy Infrastructure';
