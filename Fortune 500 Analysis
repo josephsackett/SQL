@@ -61,8 +61,7 @@ VALUES
 # Analysis: 
 
 # Assign all the companies in the Healthcare industry as "mother friendly workplace", "acceptable", or "abysmal" based on the maternity leave offered. 
-SELECT
-company_name,
+SELECT company_name,
 CASE 
   WHEN maternity_leave_weeks >= 10 THEN 'mother friendly workplace'
   WHEN maternity_leave_weeks >= 8 THEN 'acceptable'
@@ -70,4 +69,35 @@ CASE
 END as mother_friendliness
 FROM fortune_companies
 WHERE industry='Healthcare';
+
+# This query helps understand which industries are thriving financially and how large the companies within those industries tend to be, indicating their market presence and stability.
+SELECT industry, AVG(revenue) AS average_revenue, AVG(employees) AS average_employees
+FROM fortune_companies
+GROUP BY industry
+ORDER BY average_revenue DESC;
+
+#This query identifies companies that are most supportive of employee health and family life, indicating a positive workplace culture.
+SELECT company_name, industry, healthcare_benefits, maternity_leave_weeks
+FROM fortune_companies
+WHERE healthcare_benefits = 1
+ORDER BY maternity_leave_weeks DESC, healthcare_benefits DESC
+LIMIT 10;
+
+#Average Paid Time Off and Maternity Leave by Industry: Understanding the average time off across industries can help gauge the work-life balance offered.
+SELECT industry, AVG(paid_time_off_days) AS avg_pto_days, AVG(maternity_leave_weeks) AS avg_maternity_leave
+FROM fortune_companies
+GROUP BY industry
+ORDER BY avg_pto_days DESC, avg_maternity_leave DESC;
+
+#This query can identify industries that not only perform well financially (above the average revenue) but also provide information on whether the majority of companies in these industries offer healthcare benefits. 
+It's useful for understanding the correlation between financial performance and employee benefits.
+SELECT industry, 
+    AVG(revenue) AS average_revenue,
+    SUM(CASE WHEN healthcare_benefits = 1 THEN 1 ELSE 0 END) AS companies_with_healthcare,
+    COUNT(company_id) AS total_companies,
+    (SUM(CASE WHEN healthcare_benefits = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(company_id)) AS percentage_with_healthcare
+FROM fortune_companies
+GROUP BY industry
+HAVING AVG(revenue) > (SELECT AVG(revenue) FROM fortune_companies)
+ORDER BY average_revenue DESC;
 
