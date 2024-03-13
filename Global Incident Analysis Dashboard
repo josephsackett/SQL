@@ -51,3 +51,8 @@ WHERE incident_id NOT IN (
     SELECT DISTINCT incident_id
     FROM agents_reports);
 
+#This query ranks agents by the number of reports they've filed, providing insight into agent activity levels. Such analysis can be used for performance evaluation or workload distribution.
+SELECT agent_id, COUNT(report_id) AS reports_filed
+FROM agents_reports
+GROUP BY agent_id
+ORDER BY reports_filed DESC;
