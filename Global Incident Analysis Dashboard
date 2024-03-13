@@ -32,3 +32,7 @@ VALUES
     (3, 3, 'AGT1003', '2023-07-06', 'Technology seized is cutting-edge and likely intended for military applications by Country Z. Successful interception prevents potential security breach.', 'Advise strengthening export controls and enhancing border security measures.');
 
 #This query provides a summary of incidents grouped by threat level, showing the count of incidents at each level. It's an essential analysis for understanding the distribution of incidents based on severity.
+SELECT threat_level, COUNT(incident_id) AS incident_count
+FROM incidents
+GROUP BY threat_level
+ORDER BY incident_count DESC;
